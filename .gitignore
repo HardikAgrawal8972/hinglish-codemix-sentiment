@@ -1,0 +1,7 @@
+checkpoints/
+data/*.parquet
+data/*.csv
+data/lince_data/
+__pycache__/
+.ipynb_checkpoints/
+.env

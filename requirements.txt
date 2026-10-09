@@ -1,0 +1,5 @@
+# STUB -- replace with the exact `pip freeze` from the Colab runtime that produced the results.
+# Run in a cell of the fine-tuning notebook (Phase 2) and of the analysis notebook (Phase 4):
+#   !pip freeze | grep -iE "^(transformers|torch|datasets|accelerate|scikit-learn|scipy|statsmodels|pandas|numpy|pyarrow|wordfreq|matplotlib|seaborn|sentencepiece)=="
+# Known floor (Phase 1): transformers>=4.41  (older releases use evaluation_strategy=, not eval_strategy=)
+transformers>=4.41

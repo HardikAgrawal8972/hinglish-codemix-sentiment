@@ -1,0 +1,44 @@
+{
+  "phase": 3,
+  "output": "sentence_features.csv",
+  "n_rows": 15131,
+  "source_table": "sa_master.parquet",
+  "feature_columns": [
+    "cmi",
+    "length",
+    "switch_density",
+    "hi_ratio",
+    "caps_ratio",
+    "oov_rate"
+  ],
+  "diagnostic_columns": [
+    "n_lang_tokens",
+    "n_switches",
+    "n_alpha_tokens"
+  ],
+  "decisions": {
+    "switch_density_normalizer": "lang_pairs",
+    "switch_density_formula": "n_switches / max(1, n_lang_tokens - 1)",
+    "oov_vocab": {
+      "source": "wordfreq.top_n_list(\"en\", 20000)",
+      "package_version": "3.1.1",
+      "vocab_size": 19583
+    },
+    "oov_vocab_audit": {
+      "hin_leakage_token_level": 0.4282,
+      "hin_leakage_type_level": 0.1015,
+      "eng_coverage_token_level": 0.828,
+      "eng_coverage_type_level": 0.3631,
+      "n_hin_alpha_tokens": 182374,
+      "n_eng_alpha_tokens": 119005
+    },
+    "oov_denominator": "alphabetic tokens only (token.isalpha()); URLs/mentions/hashtags/emoji excluded",
+    "oov_known_confound": "romanized Hindi, slang and misspellings all count as OOV; oov_rate measures non-canonical-English density and correlates with hi_ratio; check VIF in Phase 4 and do not enter oov_rate and hi_ratio in the same regression untested",
+    "caps_ratio": "fraction of alphabetic tokens with len >= 2 and token.isupper()",
+    "hi_ratio": "count(HI) / max(1, count(HI) + count(EN))  [spec file as saved reads Hin/Eng; data tags are HI/EN]",
+    "cmi": "carried unchanged from sa_master.parquet (Das & Gamback 2014)",
+    "empty_denominator_policy": "features with an empty denominator are 0.0, never NaN"
+  },
+  "pandas_version": "2.2.2",
+  "numpy_version": "2.0.2"
+}

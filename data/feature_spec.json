@@ -35,7 +35,7 @@
     "oov_denominator": "alphabetic tokens only (token.isalpha()); URLs/mentions/hashtags/emoji excluded",
     "oov_known_confound": "romanized Hindi, slang and misspellings all count as OOV; oov_rate measures non-canonical-English density and correlates with hi_ratio; check VIF in Phase 4 and do not enter oov_rate and hi_ratio in the same regression untested",
     "caps_ratio": "fraction of alphabetic tokens with len >= 2 and token.isupper()",
-    "hi_ratio": "count(HI) / max(1, count(HI) + count(EN))  [spec file as saved reads Hin/Eng; data tags are HI/EN]",
+    "hi_ratio": "count(HI) / max(1, count(HI) + count(EN))  [data tags are HI/EN; an earlier version of this spec said Hin/Eng, which was a bug fixed in Phase 3]",
     "cmi": "carried unchanged from sa_master.parquet (Das & Gamback 2014)",
     "empty_denominator_policy": "features with an empty denominator are 0.0, never NaN"
   },

@@ -39,17 +39,17 @@ Labels: negative/neutral/positive. Models and Hugging Face IDs as in the README.
 | mBERT | general | 0.628 | 0.631 ± 0.011 |
 | IndicBERT | general | 0.623 | 0.627 ± 0.003 |
 
-**Robustness gap** (accuracy(low-CMI) − accuracy(high-CMI), 2,000-iteration block bootstrap; `robustness_gap.csv`):
+**Robustness gap** (tertile CMI buckets on the test set, cut-offs 23.08 and 35.0, 510/503/501 sentences; gap = accuracy(low) − accuracy(high), 2,000-iteration block bootstrap; `robustness_gap.csv`, `cmi_bucket_accuracy_bootstrap.csv`):
 
-| Model | Gap | 95% CI |
-|---|---:|---|
-| HingBERT | +0.000 | [−0.053, +0.054] |
-| HingRoBERTa | −0.005 | [−0.054, +0.044] |
-| MuRIL | −0.005 | [−0.057, +0.045] |
-| mBERT | −0.016 | [−0.071, +0.038] |
-| IndicBERT | −0.025 | [−0.078, +0.032] |
+| Model | Type | Acc. low | Acc. mid | Acc. high | Gap | 95% CI |
+|---|---|---:|---:|---:|---:|---|
+| HingBERT | Hinglish | 0.688 | 0.688 | 0.688 | +0.000 | [−0.052, +0.054] |
+| HingRoBERTa | Hinglish | 0.699 | 0.680 | 0.704 | −0.005 | [−0.054, +0.044] |
+| MuRIL | general | 0.658 | 0.645 | 0.663 | −0.005 | [−0.058, +0.046] |
+| mBERT | general | 0.625 | 0.618 | 0.641 | −0.016 | [−0.070, +0.038] |
+| IndicBERT | general | 0.624 | 0.598 | 0.648 | −0.025 | [−0.077, +0.032] |
 
-Every CI includes zero, and the Hinglish-specific models show no smaller gap than the general ones.
+Every CI includes zero, and the Hinglish-specific models show no smaller gap than the general ones (mean gap −0.002 vs −0.015).
 The hypothesis that Hinglish pretraining buys robustness to code-mixing is not supported.
 Figures: `figures/robustness_gap.png`, `figures/accuracy_by_cmi_bucket.png`.
 
@@ -75,8 +75,7 @@ candidates; 40 sampled (seed 42), of which 28 were wrong in all five models.
 | sarcasm_irony | 10 |
 | text_quality_noise | 5 |
 | entity_domain_knowledge | 5 |
-| conflicting_signals | 3 |
-| mixed_idiom | 2 |
+| conflicting_signals | 5 |
 
 Lexically-charged neutrals and sarcasm make up 25/40 (62.5%). Neutral is 50% (20/40) of the sample,
 against 37.3% of both the full corpus and the test split. Of the 20 neutral
@@ -89,10 +88,10 @@ Examples and full sentence_id lists: `report/error_analysis.md`.
   regenerated; only post-fix numbers are reported.
 - **Analysis bug (Phase 4):** a cell-order error in VIF/standardization cascaded through the
   logistic regression; fixed by consolidating into one cell.
-- **Bucket-table inconsistency:** the saved `cmi_bucket_accuracy_bootstrap.csv` (and so `phase4_analysis.csv`'s `acc_mid`/`acc_high` columns) contains only mid and high buckets, with no low bucket, while the gap in `robustness_gap.csv` is computed as low minus high in the notebook. The gap values and CIs above are the notebook's; the per-bucket table should be regenerated for consistency (the notebook caches results to Drive, so delete the cached CSVs and re-run).
+- **Stale cache (fixed 2026-10-11):** the first saved bucket table came from a cached earlier run with only two buckets. It was regenerated with the final tertile buckets; gap point estimates were unchanged and intervals moved by under 0.002.
+- **Phase 5 cut-off:** the error-analysis sample defined high-CMI with corpus-wide percentiles, Phase 4 with test-set percentiles (67th = 35.0). All 40 reviewed sentences have CMI >= 35.0; one (id 21139) is exactly on the boundary.
 - Single dataset; CPU-only analysis; modest model sizes.
-- The 40-sentence sample is illustrative, not a census. mixed_idiom (n = 2) is a thin category and
-  could fold into conflicting_signals. It is kept separate because its mechanism (non-compositional idiom) differs.
+- The 40-sentence sample is illustrative, not a census. Two sentences first labelled mixed_idiom (non-compositional Hindi/Hinglish idioms, ids 32282 and 4840) were folded into conflicting_signals because the category was too thin to stand alone (5 sentences in total).
 
 ## 7. Reproducibility
 Seeds 42/43/44, pinned versions in `requirements.txt`, per-sentence predictions in `preds/`, repo: https://github.com/HardikAgrawal8972/hinglish-codemix-sentiment.

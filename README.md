@@ -24,7 +24,7 @@ semantic/pragmatic (charged-but-neutral text, sarcasm), not tokenization.
 
 (Per-row accuracy pooled over 3 seeds is in the report; source: `results/phase4_analysis.csv`. The table above uses modal-vote accuracy.)
 
-Qualitative: 40 hardest errors (high-CMI and wrong in >=4/5 models) fall into six modes; lexically
+Qualitative: 40 hardest errors (high-CMI and wrong in >=4/5 models) fall into five modes; lexically
 charged neutrals (15) and sarcasm (10) account for 62.5%. See `report/REPORT.md`.
 
 ## Repo layout
